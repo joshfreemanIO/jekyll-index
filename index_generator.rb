@@ -23,26 +23,34 @@ module Jekyll
 
     def generate site
       return unless site.config['indexgenerator']
+      @site = site
+      build_index
 
-      build_index site, site.config['indexgenerator']
-
-      site.config['indexgenerator'].each do |item|
-        build_index site, item['index']
-        puts item['index']
-      end
+      # site.config['indexgenerator'].each do |item|
+      #   build_index site, item['index']
+      # end
       puts @index
     end
 
-    def build_index site, index
+    def build_index
+      built_index = Array.new
 
-      index = Hash.new({:index => index, :items => {}})
-        # site.site_payload['site']['posts'].each { |post| puts post.author_name}
+      @site.config['indexgenerator'].each do |index|
+        mini_index = {:index => index['index'], :items => {} }
+        @site.posts.each do |post|
 
-      site.posts.each do |post|
-        puts post.data['author_name']
+          data = post.data[index['index']]
+          data = Array.new([data]) if data.kind_of?(String)
+
+          data.each do |index_name|
+            mini_index[:items][index_name] ||= Array.new
+            mini_index[:items][index_name] << post
+          end
+        end
+        built_index << mini_index
       end
 
-      puts index
+      return built_index
     end
     # def build_index index_config
 
