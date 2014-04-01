@@ -1,8 +1,8 @@
 module Jekyll
 
-#
-# # Author Index Generator
-#
+  #
+  # # Author Index Generator
+  #
 
   class AuthorIndexGenerator < Generator
 
