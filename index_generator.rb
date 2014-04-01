@@ -24,19 +24,43 @@ module Jekyll
     def generate site
       return unless site.config['indexgenerator']
 
+      build_index site, site.config['indexgenerator']
+
       site.config['indexgenerator'].each do |item|
+        build_index site, item['index']
         puts item['index']
       end
-
+      puts @index
     end
+
+    def build_index site, index
+
+      index = Hash.new({:index => index, :items => {}})
+
+      site.posts.each do |post|
+        index['items'][post['index']] = post
+      end
+
+      puts index
+    end
+    # def build_index index_config
+
+    #   @index = index_config
+    #   puts @index
+    #   @index.each do |index_item|
+    #     site.posts.each do |post|
+    #       index_item['items'][post[index_item['index']]] = post
+    #     end
+    #   end
+    # end
   end
 
   class IndexPage < Page
-    def initialize site, base, dir, name
+    def initialize site, index_config
       @site = site
-      @base = base
-      @dir  = dir
-      @name = name
+      @base = site.source
+      @dir  = index_config['directory']
+      @name = index_config['index']
 
       self.process(name)
       self.read_yaml(File.join(base, dir), name)
