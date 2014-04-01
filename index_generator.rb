@@ -36,9 +36,10 @@ module Jekyll
     def build_index site, index
 
       index = Hash.new({:index => index, :items => {}})
+        # site.site_payload['site']['posts'].each { |post| puts post.author_name}
 
       site.posts.each do |post|
-        index['items'][post['index']] = post
+        puts post.data['author_name']
       end
 
       puts index
