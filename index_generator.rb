@@ -36,18 +36,18 @@ module Jekyll
       built_index = Array.new
 
       @site.config['indexgenerator'].each do |index|
-        mini_index = {:index => index['index'], :items => {} }
+        micro_index = {:index => index['index'], :items => {} }
         @site.posts.each do |post|
 
           data = post.data[index['index']]
           data = Array.new([data]) if data.kind_of?(String)
 
           data.each do |index_name|
-            mini_index[:items][index_name] ||= Array.new
-            mini_index[:items][index_name] << post
+            micro_index[:items][index_name] ||= Array.new
+            micro_index[:items][index_name] << post
           end
         end
-        built_index << mini_index
+        built_index << micro_index
       end
 
       return built_index
