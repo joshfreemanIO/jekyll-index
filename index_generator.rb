@@ -40,7 +40,7 @@ module Jekyll
 
           data.each do |index_name|
             micro_index['items'][index_name] ||= Array.new
-            micro_index['items'][index_name] << post
+            micro_index['items'][index_name].unshift(post)
             indexes << index_name
           end
         end
