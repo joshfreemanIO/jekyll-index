@@ -1,0 +1,24 @@
+---
+layout: blog-index-wrapper
+---
+
+<legend>{{page.index_name}}: {{ page.page_tag | capitalize  }} </legend>
+
+{% for post in page.page_items %}
+{% if post.type == 'post' %}
+{% if post.published == true %}
+{% if post.private != true %}
+{% if post.url != site.posts[0].url %}
+
+<!-- Begin: {{ post.type }} -->
+{% include _post-index-partial.html %}
+<!-- End -->
+
+{% endif %}
+{% endif %}
+{% endif %}
+{% endif %}
+{% endfor %}
+
+{% include _paginator.html %}
+
