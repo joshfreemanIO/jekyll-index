@@ -21,29 +21,24 @@ module Jekyll
 
   class IndexGenerator < Generator
     safe true
+    priority :low
 
     def generate site
       return unless site.config['indexgenerator']
-      @site = site
 
-      master_index = build_index
+      master_index = build_index site
+      pp master_index
       master_index.each do |index|
-        index[:items].each do |index_name, indexed_item|
-          puts index_name
-        end
+        site.pages << IndexPage.new(site, index[:config])
       end
-
-      # site.config['indexgenerator'].each do |item|
-      #   build_index site, item['index']
-      # end
     end
 
-    def build_index
+    def build_index site
       built_index = Array.new
 
-      @site.config['indexgenerator'].each do |index|
-        micro_index = {:index => index['index'], :items => {} }
-        @site.posts.each do |post|
+      site.config['indexgenerator'].each do |index|
+        micro_index = {:config => index, :items => {} }
+        site.posts.each do |post|
 
           data = post.data[index['index']]
           data = Array.new([data]) if data.kind_of?(String)
@@ -68,7 +63,7 @@ module Jekyll
       @name = index_config['index']
 
       self.process(name)
-      self.read_yaml(File.join(base, dir), name)
+      self.read_yaml File.join(@base, '_layouts'), index_config['layout'] + '.html'
     end
   end
 end
