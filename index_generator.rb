@@ -50,16 +50,12 @@ module Jekyll
 
       return built_index, indexes
     end
-
-    def self.get_index name
-      master_index[name]
-    end
   end
 
   class IndexPage < Page
     def initialize site, index_config, indexes, index_name, index_items
 
-      dir = File.join(index_config['directory'], index_name).downcase.gsub(/[^a-zA-Z0-9\/]/,'-')
+      dir = File.join(index_config['directory'], index_name).downcase.gsub(/[^a-zA-Z0-9\/]/,'_')
 
       @site = site
       @base = site.source
@@ -76,8 +72,8 @@ module Jekyll
       self.data['items'] = index_items
     end
   end
-  class Site
 
+  class Site
     attr_accessor :custom_payload
 
     def indexes index_name, index_items
