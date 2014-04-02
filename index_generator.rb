@@ -90,7 +90,7 @@ module Jekyll
 
     alias old_site_payload site_payload
     def site_payload
-      old_site_payload.merge({'indexes'=>custom_payload, 'count' => 0})
+      old_site_payload.merge!({'indexes'=>custom_payload})
     end
   end
 end
