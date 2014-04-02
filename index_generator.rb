@@ -27,9 +27,10 @@ module Jekyll
       return unless site.config['indexgenerator']
 
       master_index = build_index site
-      pp master_index
       master_index.each do |index|
-        site.pages << IndexPage.new(site, index[:config])
+        index[:items].each do |index_name,index_items|
+          site.pages << IndexPage.new(site, index[:config], index_name, index_items)
+        end
       end
     end
 
@@ -40,7 +41,7 @@ module Jekyll
         micro_index = {:config => index, :items => {} }
         site.posts.each do |post|
 
-          data = post.data[index['index']]
+          data = post.data[index['post_attribute']]
           data = Array.new([data]) if data.kind_of?(String)
 
           data.each do |index_name|
@@ -56,14 +57,23 @@ module Jekyll
   end
 
   class IndexPage < Page
-    def initialize site, index_config
+    def initialize site, index_config, index_name, index_items
+
+      dir = File.join(index_config['directory'], index_name).downcase.gsub(/[^a-zA-Z0-9\/]/,'-')
+
       @site = site
       @base = site.source
-      @dir  = index_config['directory']
-      @name = index_config['index']
+      @dir  = dir
+      @name = 'index.html'
+
+      puts dir
 
       self.process(name)
       self.read_yaml File.join(@base, '_layouts'), index_config['layout'] + '.html'
+
+      self.data['post_attribtute'] = index_config['post_attribtute']
+      self.data['index_name'] = index_config['name']
+      self.data['index_items'] = index_items
     end
   end
 end
