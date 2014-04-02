@@ -21,8 +21,8 @@ module Jekyll
 
       master_index, indexes = build_index site
       master_index.each do |name, hash|
-        hash[:items].each do |index_name,index_items|
-          site.pages << IndexPage.new(site, hash[:config], indexes, index_name, index_items)
+        hash['items'].each do |index_name,index_items|
+          site.pages << IndexPage.new(site, hash['config'], indexes, index_name, index_items)
         end
       end
     end
@@ -32,20 +32,20 @@ module Jekyll
       indexes = Array.new
 
       site.config['indexgenerator'].each do |index|
-        micro_index = {:config => index, :items => {} }
+        micro_index = {'config' => index, 'items' => {} }
         site.posts.each do |post|
 
           data = post.data[index['post_attribute']]
           data = Array.new([data]) if data.kind_of?(String)
 
           data.each do |index_name|
-            micro_index[:items][index_name] ||= Array.new
-            micro_index[:items][index_name] << post
+            micro_index['items'][index_name] ||= Array.new
+            micro_index['items'][index_name] << post
             indexes << index_name
           end
         end
-        built_index[micro_index[:config]['name']] = micro_index
-        site.indexes micro_index[:config]['name'], micro_index
+        built_index[micro_index['config']['name']] = micro_index
+        site.indexes micro_index['config']['name'], micro_index
       end
 
       return built_index, indexes
