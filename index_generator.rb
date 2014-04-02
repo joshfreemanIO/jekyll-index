@@ -1,16 +1,61 @@
-require 'yaml'
 module Jekyll
 
-  #
+  ###
   # # Index Generator
+  #
+  # Jekyll Plugin to build indexes from Posts
+  #
+  # ## Installation and Configuration
+  #
+  # To use in a Jekyll application, copy this file into _plugins
+  # and add the following configuration to your _config.yml
   #
   # ```yaml
   # indexgenerator:
   #   - name: Author
+  #     name_plural: Authors
   #     post_attribute: author_name
   #     directory: blog/author
   #     layout: blog-author-index
+  #   - name: Tag
+  #     name_plural: Tags
+  #     post_attribute: tags
+  #     directory: blog/tag
+  #     layout: blog-tag-index
   # ```
+  #
+  # name/name_plural: how you want to referenced the index in a template
+  # post_attribute: the variable you want to index in a post's front-matter
+  # directory: the output directory during a Jekyll build
+  # layout: the layout to use for displaying individual index results
+  #
+  # ## Accessing Built Indexes
+  #
+  # You can access your indexes two ways: globally and through templates.
+  #
+  # To access a single index, use your layout with the following variables:
+  #
+  # - page.index_name (the name attribute in your _config.yml)
+  # - page.indexes (a list of all index names--all authors or tags, for example)
+  # - page.name (the indivual index name--a particular author or tag, for example)
+  # - page.items (the posts associated to a particular index)
+  #
+  # To access all indexes globally, use  {{ indexes }}. Liquid handles hashes a bit
+  # differently than ruby, see below;
+  #
+  # ```html
+  # {% for index in indexes %}
+  #     <h1>{{index[1].config.name_plural}}</h1>
+  #     <ul>
+  #         {% for item in index[1].items %}
+  #         <li>{{item[0]}}</li>
+  #         {% endfor %}
+  #     </ul>
+  # {% endfor %}
+  # ```
+  #
+  # Everything in the config hash are the index-specific settings from _config.yml.
+  # Everything in the items hash are the generated indexes.
 
   class IndexGenerator < Generator
     safe true
@@ -52,6 +97,22 @@ module Jekyll
     end
   end
 
+  ###
+  # # Index Page
+  #
+  # Page generator for the Index Generator Plugin
+  #
+  # Each page is index specific. This class extends Jekyll::Page, and
+  # the best way to learn the inner workings is to read the original
+  # documentation.
+  #
+  # The intialization method parameters differ from the original class.
+  # This does not present a problem so long as the correct class properties are
+  # set and class methods are called, similarly to the parent class.
+  #
+  # All self.data assignments allow the template to access those parameters
+  # through {{ page.param }}
+
   class IndexPage < Page
     def initialize site, index_config, indexes, index_name, index_items
 
@@ -73,6 +134,21 @@ module Jekyll
     end
   end
 
+  ###
+  # # Site
+  #
+  # This modifies the original Jekyll::Site to create global access
+  # for custom index variables.
+  #
+  # Standard global variables access:
+  # {{ site }}, {{ page }}, etc.
+  #
+  # Additional global variable access:
+  # {{ indexes }}
+  #
+  # The global indexes variable contains ALL generated indexes specified
+  # in the _config.yml under the indexgenerator section.
+  #
   class Site
     attr_accessor :custom_payload
 
