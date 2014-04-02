@@ -5,10 +5,7 @@ index: WOOOW
 name: page.name
 ---
 <legend>{{page.index_name}}: {{ page.name }} </legend>
-<h1>{{jekyll}}</h1>
-<h2>{{site}}</h2>
-<h3>{{IndexGenerator.get_index('Author')}}</h3>
-<!--
+
 {% for post in page.items %}
 {% if post.type == 'post' %}
 {% if post.published == true %}
@@ -25,4 +22,4 @@ End
 {% endif %}
 {% endfor %}
 
-{% include _paginator.html %} -->
+{% include _paginator.html %}

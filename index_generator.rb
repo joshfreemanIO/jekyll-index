@@ -20,13 +20,11 @@ module Jekyll
       return unless site.config['indexgenerator']
 
       master_index, indexes = build_index site
-      puts master_index
       master_index.each do |name, hash|
         hash[:items].each do |index_name,index_items|
           site.pages << IndexPage.new(site, hash[:config], indexes, index_name, index_items)
         end
       end
-      File.open('/tmp/jekyll-index.yml', 'w') {|f| f.write master_index.to_yaml}
     end
 
     def build_index site
@@ -47,13 +45,13 @@ module Jekyll
           end
         end
         built_index[micro_index[:config]['name']] = micro_index
+        site.indexes micro_index[:config]['name'], micro_index
       end
 
       return built_index, indexes
     end
 
     def self.get_index name
-      master_index = YAML::load_file('/tmp/jekyll-index.yml')
       master_index[name]
     end
   end
@@ -76,6 +74,23 @@ module Jekyll
       self.data['indexes'] = indexes
       self.data['name'] = index_name
       self.data['items'] = index_items
+    end
+  end
+  class Site
+
+    attr_accessor :custom_payload
+
+    def indexes index_name, index_items
+      custom_payload.merge!({"#{index_name}"=>index_items})
+    end
+
+    def custom_payload
+      @custom_payload ||= {}
+    end
+
+    alias old_site_payload site_payload
+    def site_payload
+      old_site_payload.merge({'indexes'=>custom_payload, 'count' => 0})
     end
   end
 end
