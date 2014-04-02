@@ -1,3 +1,4 @@
+require 'pp'
 module Jekyll
 
   #
@@ -24,12 +25,17 @@ module Jekyll
     def generate site
       return unless site.config['indexgenerator']
       @site = site
-      build_index
+
+      master_index = build_index
+      master_index.each do |index|
+        index[:items].each do |index_name, indexed_item|
+          puts index_name
+        end
+      end
 
       # site.config['indexgenerator'].each do |item|
       #   build_index site, item['index']
       # end
-      puts @index
     end
 
     def build_index
@@ -52,16 +58,6 @@ module Jekyll
 
       return built_index
     end
-    # def build_index index_config
-
-    #   @index = index_config
-    #   puts @index
-    #   @index.each do |index_item|
-    #     site.posts.each do |post|
-    #       index_item['items'][post[index_item['index']]] = post
-    #     end
-    #   end
-    # end
   end
 
   class IndexPage < Page
