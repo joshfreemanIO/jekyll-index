@@ -1,6 +1,6 @@
 # Jekyll Index
 
-This Jekyll plugin generates indexes from the front-matter in each post. This plugin attempts mimic the built-in functionality of **tags** and **categories**, but for any metadata specified.
+This Jekyll plugin generates indexes from the front-matter in each post. This plugin attempts to mimic the built-in functionality of **tags** and **categories**, but for any metadata specified.
 
 ## Installation and Configuration
 
