@@ -35,18 +35,48 @@ Per-index configuration options
     <dd>The layout to use for displaying individual index results</dd>
 </dl>
 
+To use the generator, add the attributes you want to index to a post's front-matter:
+
+```yml
+---
+published: true
+private: false
+type: post
+layout: post
+title: Post Title
+excerpt: Post Excerpt
+tags:
+ - git
+ - gitHooks
+ - Source Control
+categories:
+ - Software Development
+allow_comments: true
+author_name: Josh Freeman
+author_email: joshf@grok-interactive.com
+---
+
+Post content...
+
+```
 ## Usage
 
 You can access your indexes two ways: globally and through templates.
 
 To access a single index, use your layout with the following variables:
 
-- page.index_name (the name attribute in your _config.yml)
-- page.indexes (a list of all index names--all authors or tags, for example)
-- page.name (the indivual index name--a particular author or tag, for example)
-- page.items (the posts associated to a particular index)
+<dl>
+    <dt>page.index_name</dt>
+    <dd>the name attribute in your ```_config.yml```</dd>
+    <dt>page.indexes</dt>
+    <dd>a list of all index names--all authors or tags, for example</dd>
+    <dt>page.name</dt>
+    <dd>the indivual index name--a particular author or tag, for example</dd>
+    <dt>page.items</dt>
+    <dd>the posts associated to a particular index</dd>
+</dl>
 
-To access all indexes globally, use  {{ indexes }}. Liquid handles hashes a bit
+To access all indexes globally, use  ```{{ indexes }}```. Liquid handles hashes a bit
 differently than ruby, see below:
 
 ```html
