@@ -83,10 +83,13 @@ module Jekyll
           data = post.data[index['post_attribute']]
           data = Array.new([data]) if data.kind_of?(String)
 
+          next if data.nil?
+
           data.each do |index_name|
             micro_index['items'][index_name] ||= Array.new
             micro_index['items'][index_name].unshift(post)
             indexes << index_name
+            puts "Generating #{index['name']} Index: adding \'#{post.title}\' to \'#{index_name}\' index";
           end
         end
         built_index[micro_index['config']['name']] = micro_index
