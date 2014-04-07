@@ -46,11 +46,10 @@ layout: post
 title: Post Title
 excerpt: Post Excerpt
 tags:
- - git
- - gitHooks
- - Source Control
+ - tag 1
+ - tag 2
 categories:
- - Software Development
+ - category
 allow_comments: true
 author_name: Josh Freeman
 author_email: joshf@grok-interactive.com
